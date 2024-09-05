@@ -56,24 +56,15 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // Update current user details
+    // Update user details
     @PutMapping("/me")
-    public ResponseEntity<?> updateCurrentUser(@Valid @RequestBody User updatedUser, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> updateCurrentUser(@RequestBody User updatedUser, Principal principal, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        Optional<User> user = userService.findUserByUsername(principal.getName());
-        if (user.isPresent()) {
-            User currentUser = user.get();
-            currentUser.setEmail(updatedUser.getEmail());
-            currentUser.setUsername(updatedUser.getUsername());
-            currentUser.setPassword(updatedUser.getPassword());  // Consider encrypting the password here
-            userService.updateUser(currentUser);
-            return ResponseEntity.ok(currentUser);
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        // Call the updateUser method from UserService
+        User updated = userService.updateUser(updatedUser);
+        return ResponseEntity.ok(updated);
     }
-
 }
