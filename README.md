@@ -110,10 +110,11 @@ This endpoint allows a logged-in user to update their profile details.
 
 - **Method**: `PUT`
 - **URL**: `http://localhost:8080/api/users/me`
-- **Authorization**: Basic Auth with the user's credentials.
+- **Authorization**: Basic Auth with the user's credentials. You must provide the id given to the profile
 - **Body (JSON)**:
    ```json
    {
+     "id": 1,
      "username": "newUsername",
      "email": "newemail@example.com",
      "password": "NewPassword123"
